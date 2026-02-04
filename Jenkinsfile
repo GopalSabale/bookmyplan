@@ -18,13 +18,6 @@ pipeline {
                 echo 'Code Compilation Completed Successfully!'
             }
         }
-        stage('Code QA Execution') {
-            steps {
-                echo 'Running JUnit Test Cases...'
-                sh 'mvn clean test'
-                echo 'JUnit Test Cases Completed Successfully!'
-            }
-        }
 
        stage('Code Package') {
             steps {

@@ -33,7 +33,7 @@ pipeline {
                 sh '''
                     cp target/*.jar target/bookmyplan-1.1.${BUILD_NUMBER}.jar
                 '''
-                echo 'JAR Artifact Created Sucessfully!'
+                echo 'JAR Artifact Created Successfully!'
             }
         }
     }

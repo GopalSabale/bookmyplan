@@ -33,7 +33,7 @@ pipeline {
                 sh '''
                     mv target/*.jar target/bookmyplan-1.1.10.jar
                 '''
-                echo 'JAR Artifact Created Successfully!'
+                echo 'JAR Artifact Created Sucessfully!'
             }
         }
     }

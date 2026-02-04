@@ -31,7 +31,7 @@ pipeline {
                 echo 'Creating JAR Artifact...'
                 sh 'mvn clean package'
                 sh '''
-                    cp target/*.jar target/bookmyplan-1.1.${BUILD_NUMBER}.jar
+                    mv target/*.jar target/bookmyplan-1.1.10.jar
                 '''
                 echo 'JAR Artifact Created Successfully!'
             }

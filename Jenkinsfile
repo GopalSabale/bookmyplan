@@ -11,41 +11,30 @@ pipeline {
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Compile') {
+        stage('Code Compilation') {
             steps {
                 echo 'Starting Code Compilation...'
-                sh 'mvn compile'
+                sh 'mvn clean compile'
+                echo 'Code Compilation Completed Successfully!'
             }
         }
-
-        stage('Test') {
+        stage('Code QA Execution') {
             steps {
                 echo 'Running JUnit Test Cases...'
-                sh 'mvn test'
+                sh 'mvn clean test'
+                echo 'JUnit Test Cases Completed Successfully!'
             }
         }
 
-        stage('Package') {
+       stage('Code Package') {
             steps {
                 echo 'Creating WAR Artifact...'
-                sh 'mvn package'
+                sh 'mvn clean package'
+                sh '''
+                    cp target/*.jar target/bookmyplan-1.1.${BUILD_NUMBER}.jar
+                '''
+                echo 'WAR Artifact Created Successfully!'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline executed successfully 🎉'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
         }
     }
 }

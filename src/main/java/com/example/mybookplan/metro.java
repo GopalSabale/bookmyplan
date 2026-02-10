@@ -8,6 +8,6 @@ public class metro {
 
     @GetMapping("/metro")
     public String getData() {
-        return "Hello Welcome to BookMyPlan, Please book  metro at 10% discount";
+        return "Hello Welcome to BookMyPlan, Please book  metro at 20% discount";
     }
 }

@@ -71,14 +71,14 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(
-                        [credentialsId: 'ecr:ap-south-1:ecr-credentials',
-                         url: 'https://315354952103.dkr.ecr.ap-south-1.amazonaws.com']
+                        [credentialsId: 'ecr:us-east-1:ecr-credentials',
+                         url: 'https://315354952103.dkr.ecr.us-east-1.amazonaws.com']
                     ) {
                         echo 'Tagging and Pushing Docker Image to ECR...'
                         sh '''
                             docker images
-                            docker tag bookmyplan:latest 315354952103.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest
-                            docker push 315354952103.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest
+                            docker tag bookmyplan:latest 315354952103.dkr.ecr.us-east-1.amazonaws.com/bookmyplan:latest
+                            docker push 315354952103.dkr.ecr.us-east-1.amazonaws.com/bookmyplan:latest
                         '''
                         echo 'Docker Image Pushed to Amazon ECR Successfully!'
                     }

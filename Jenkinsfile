@@ -90,7 +90,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login 54.196.173.157:8085 -u ${USERNAME} --password-stdin"
+                        sh "docker login 54.196.173.157:8085 -u ${USERNAME} -p ${PASSWORD}"
                         echo "Push Docker Image to Nexus : In Progress"
                         sh 'docker tag bookmyplan:latest 54.196.173.157:8085/bookmyplan:latest'
                         sh 'docker push 54.196.173.157:8085/bookmyplan:latest'

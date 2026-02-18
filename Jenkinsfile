@@ -33,7 +33,7 @@ pipeline {
                 echo 'Creating JAR Artifact...'
                 sh 'mvn clean package'
                 sh '''
-                    cp target/*.jar target/bookmyplan-1.1.10.jar
+                    cp target/*.jar target/bookmyplan-1.1.${BUILD_NUMBER}.jar
                 '''
                 echo 'JAR Artifact Created Successfully!'
             }
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]) {
-                        sh 'docker login docker.io -u gopalsabale -p ${dockerhubCred}'
+                        sh "docker login docker.io -u gopalsabale -p ${dockerhubCred}"
                         echo 'Pushing Docker Image to Docker Hub...'
                         sh 'docker push gopalsabale/bookmyplan:latest'
                         echo 'Docker Image Pushed to Docker Hub Successfully!'
@@ -71,8 +71,8 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(
-                        [credentialsId: 'ecr:us-east-1:ecr-credentials',
-                         url: 'https://315354952103.dkr.ecr.us-east-1.amazonaws.com']
+                        credentialsId: 'ecr:us-east-1:ecr-credentials',
+                        url: 'https://315354952103.dkr.ecr.us-east-1.amazonaws.com'
                     ) {
                         echo 'Tagging and Pushing Docker Image to ECR...'
                         sh '''
@@ -86,14 +86,28 @@ pipeline {
             }
         }
 
+        stage('Upload Docker Image to Nexus') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login 54.196.173.157:8085 -u ${USERNAME} -p ${PASSWORD}"
+                        echo "Push Docker Image to Nexus : In Progress"
+                        sh 'docker tag bookmyplan:latest 54.196.173.157:8085/bookmyplan:latest'
+                        sh 'docker push 54.196.173.157:8085/bookmyplan:latest'
+                        echo "Push Docker Image to Nexus : Completed"
+                    }
+                }
+            }
+        }
+
         stage('Clean Up Local Docker Images') {
             steps {
                 echo 'Cleaning Up Local Docker Images...'
                 sh '''
                     docker rmi gopalsabale/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi bookmyplan:latest || echo "Image not found or already deleted"
-                    docker rmi 315354952103.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
-                    docker rmi 65.0.76.100:8085/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi 315354952103.dkr.ecr.us-east-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi 3.108.228.196:8085/bookmyplan:latest || echo "Image not found or already deleted"
                     docker image prune -f
                 '''
                 echo 'Local Docker Images Cleaned Up Successfully'

@@ -1,4 +1,4 @@
 package com.example.mybookplan;
 
-public class hotel {
+public class local {
 }

@@ -131,6 +131,5 @@ pipeline {
                 echo 'Local Docker Images Cleaned Up Successfully'
             }
         }
-
     }
 }

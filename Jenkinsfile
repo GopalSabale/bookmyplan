@@ -38,7 +38,7 @@ pipeline {
                     sh 'mvn sonar:sonar'
                 }
                 echo 'SonarQube Scan Completed. Checking Quality Gate...'
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 20, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
                 echo 'Quality Gate Check Completed!'
@@ -107,10 +107,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login 50.19.178.38:8085 -u ${USERNAME} -p ${PASSWORD}"
+                        sh "docker login 100.53.213.210:8085 -u ${USERNAME} -p ${PASSWORD}"
                         echo "Push Docker Image to Nexus : In Progress"
-                        sh 'docker tag bookmyplan:latest 50.19.178.38:8085/bookmyplan:latest'
-                        sh 'docker push 50.19.178.38:8085/bookmyplan:latest'
+                        sh 'docker tag bookmyplan:latest 100.53.213.210:8085/bookmyplan:latest'
+                        sh 'docker push 100.53.213.210:8085/bookmyplan:latest'
                         echo "Push Docker Image to Nexus : Completed"
                     }
                 }
@@ -124,7 +124,7 @@ pipeline {
                     docker rmi gopalsabale/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi 315354952103.dkr.ecr.us-east-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
-                    docker rmi 50.19.178.38:8085/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi 100.53.213.210:8085/bookmyplan:latest || echo "Image not found or already deleted"
                     docker image prune -f
                 '''
                 echo 'Local Docker Images Cleaned Up Successfully'
